@@ -13,7 +13,8 @@ from flasgger.utils import swag_from
 @swag_from('documentation/city/cities_by_state.yml', methods=['GET'])
 def get_cities(state_id):
     """
-    Retrieve the list of all city objects of a specific State or a specific city.
+    Retrieve the list of all city objects of
+    a specific State or a specific city.
 
     Args:
         state_id (int): The id of the state to retrieve cities from.

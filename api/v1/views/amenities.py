@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" objects that handles all default RestFul API actions for Amenities"""
+"""Objects that handles all default RestFul API actions for Amenities"""
 from models.amenity import Amenity
 from models import storage
 from api.v1.views import app_views
@@ -12,6 +12,9 @@ from flasgger.utils import swag_from
 def get_amenities():
     """
     Retrieves a list of all amenities
+
+    Returns:
+        A JSON representation of all amenities in the storage.
     """
     all_amenities = storage.all(Amenity).values()
     list_amenities = []
@@ -24,7 +27,15 @@ def get_amenities():
                  strict_slashes=False)
 @swag_from('documentation/amenity/get_amenity.yml', methods=['GET'])
 def get_amenity(amenity_id):
-    """ Retrieves an amenity """
+    """ Retrieves an amenity by ID.
+
+    Args:
+        amenity_id: The ID of the amenity to retrieve.
+
+    Returns:
+        A JSON representation of the amenity with the given ID, or a 404 error
+        if the amenity does not exist.
+    """
     amenity = storage.get(Amenity, amenity_id)
     if not amenity:
         abort(404)
@@ -37,7 +48,14 @@ def get_amenity(amenity_id):
 @swag_from('documentation/amenity/delete_amenity.yml', methods=['DELETE'])
 def delete_amenity(amenity_id):
     """
-    Deletes an amenity  Object
+    Delete an amenity by ID.
+
+    Args:
+        amenity_id: The ID of the amenity to delete.
+
+    Returns:
+        An empty JSON response with status code 200 if the amenity is deleted
+        successfully, or a 404 error if the amenity does not exist.
     """
 
     amenity = storage.get(Amenity, amenity_id)
@@ -55,7 +73,12 @@ def delete_amenity(amenity_id):
 @swag_from('documentation/amenity/post_amenity.yml', methods=['POST'])
 def post_amenity():
     """
-    Creates an amenity
+    Create a new amenity.
+
+    Returns:
+        A JSON representation of the new amenity with status code 201 if the
+        amenity is created successfully, or a 400 error if the request is not
+        in JSON format or is missing the required 'name' field.
     """
     if not request.get_json():
         abort(400, description="Not a JSON")
